@@ -237,24 +237,19 @@ class Module:
         # only for wrapped modules (deprecated; remove in the future)
         mod_exec_name = self.__executable_path + self.__executable_name
 
-        # the laucher "loads" the module dynamically and provides the method for
-        # the executor to submit to the worker
-#        launch = Launcher( library_name, mod_name,
-#                           slot_id,
-#                           module_input,
-#                           mod_exec_name,
-#                           mod_work_dir,
-#                           param, comm, status )
-
-        # run module on its own process (file IO communication will take place 
-        # between modules)
-#        launch.run(pool_executor) 
-#        future = pool_executor.submit(launch.run())
+        # The Laucher class is passed to the executor so it creates a Launcher
+        # object on the spawned thread or process. The launcher object "loads" 
+        # the module dynamically and runs the methods on the CortixDriver module.
+        # File IO communication will take place between cortix modules behind the 
+        # scenes.
+        # Warning: do not create an object and submit a run method to the executor
         future = pool_executor.submit( Launcher, library_name, mod_name,
-                                                 slot_id, module_input,
-                                                 mod_exec_name, mod_work_dir,
+                                                 slot_id,
+                                                 module_input,
+                                                 mod_exec_name,
+                                                 mod_work_dir,
                                                  param, comm, status )
-
+ 
         return runtime_module_status_file
 #----------------------- end def execute():---------------------------------------
 

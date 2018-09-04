@@ -89,8 +89,6 @@ class Launcher():
         log.info('imported pyModule: %s', str(self.__py_module))
 #----------------------- end def __init__():--------------------------------------
 
-#    def run(self):
-#    def run(self, executor):
         """
         Function used to timestep through the modules.
         Runs the simulation from start to end, and monitors
@@ -222,13 +220,9 @@ class Launcher():
 
             # Data exchange at cortix_time (call ports first)
             guest_driver.call_ports(cortix_time)
-#            future = executor.submit(guest_driver.call_ports, cortix_time)
-#            while future.running(): 
-#                time.sleep(0.1)
 
             # Advance to cortix_time + time_step (call execute second)
             guest_driver.execute(cortix_time, time_step)
-#            future = executor.submit(guest_driver.execute, cortix_time, time_step)
 
             end_time = time.time()
             s = 'CPU elapsed time (s): ' + str(round(end_time - start_time, 2))
